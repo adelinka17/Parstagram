@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Parse
+import AlamofireImage
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -17,6 +19,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
+        
+        // User stays logged in between restarts
+        if PFUser.current() != nil {
+            let main = UIStoryboard (name:"Main", bundle: nil) // here you can make segues to different storyboards
+            
+            let FeedNavigationController = main.instantiateViewController(withIdentifier: "FeedNavigationController")
+    
+            window?.rootViewController = FeedNavigationController
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -47,6 +58,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
-
+    
 }
+
+
 

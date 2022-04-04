@@ -6,8 +6,9 @@ target 'Instagram' do
   use_frameworks!
 
   # Pods for Instagram
-  # Pods for YOUR_APP
+  # Pods for Parsatagram
   pod 'Parse'
+  pod 'MessageInputBar'
   
   target 'InstagramTests' do
     inherit! :search_paths

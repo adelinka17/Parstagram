@@ -34,11 +34,10 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     }
     */
 
-    
-    
-
     @IBAction func onSubmitButton(_ sender: Any) {
+        
         let post = PFObject(className: "Posts")
+        
         post["caption"] = commentField.text!
         post["author"] = PFUser.current()!
         
@@ -46,40 +45,60 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
         let file = PFFileObject(name: "image.png", data: imageData!)
         
         post["image"] = file
-        post.saveInBackground{ (success, error) in
+        post.saveInBackground { (success, error) in
             if success {
                 self.dismiss(animated: true, completion: nil)
-            } else{
-                print("error")
+                print("posted into Parse!")
+            } else {
+                print("error saving post!")
             }
         }
-        
     }
-
     
     @IBAction func onCameraButton(_ sender: Any) {
         let picker = UIImagePickerController()
-        picker.delegate = self
+        
+        picker.delegate = self // when pic is taken, calls back
         picker.allowsEditing = true
         
-        if UIImagePickerController.isSourceTypeAvailable(.camera){
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
             picker.sourceType = .camera
+//            present(picker, animated: true)
         } else {
             picker.sourceType = .photoLibrary
         }
-        present(picker, animated: true, completion: nil)
         
+        present(picker, animated: true, completion: nil) // will show photo album
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        picker.dismiss(animated: true, completion: nil)
+        
         let image = info[.editedImage] as! UIImage
+        
         let size = CGSize(width: 300, height: 300)
         let scaledImage = image.af_imageScaled(to: size)
-         
+        
+//        dismiss(animated: true, completion: nil)
+
         imageView.image = scaledImage
         
-        dismiss(animated: true, completion: nil)
     }
-    
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+    }
+    */
+
     
 }
+
